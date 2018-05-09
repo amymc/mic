@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Header from './Header';
-import ListItem from './ListItem';
+import List from './List';
 import './App.css';
 import articles from '../data/articles.json';
 
@@ -29,9 +29,7 @@ class App extends Component {
     return (
       <div className="App">
         <Header />
-        {this.state.articlesToLoad.map((article, i) => (
-          <ListItem key={i} item={article} />
-        ))}
+        <List articles={this.state.articlesToLoad} />
         <button onClick={this.onClick}> Show more...</button>
       </div>
     );

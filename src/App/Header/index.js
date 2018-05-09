@@ -5,6 +5,7 @@ const header = css`
   position: fixed;
   background-color: #0be6af;
   padding: 1rem;
+  height: 3rem;
   width: 100%;
 `;
 
