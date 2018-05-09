@@ -10,11 +10,12 @@ class App extends Component {
     articlesToLoad: articles.slice(0, 10),
   };
 
-  loadMore = () => {
-    console.log('load!');
+  onClick = () => {
     const { allArticles, articlesToLoad } = this.state;
+    this.loadMore();
+
     if (articlesToLoad.length === allArticles.length) {
-      //load from more-articles
+      this.loadMore();
     } else {
       this.setState({
         articlesToLoad: allArticles.slice(0, articlesToLoad.length + 10),
@@ -22,16 +23,16 @@ class App extends Component {
     }
   };
 
-  render() {
-    console.log('articles', articles);
+  loadMore = () => {};
 
+  render() {
     return (
       <div className="App">
         <Header />
         {this.state.articlesToLoad.map((article, i) => (
           <ListItem key={i} item={article} />
         ))}
-        <button onClick={this.loadMore}> Show more...</button>
+        <button onClick={this.onClick}> Show more...</button>
       </div>
     );
   }
