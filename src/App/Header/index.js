@@ -1,23 +1,28 @@
 import React, { Component } from 'react';
 import { css } from 'react-emotion';
 
-const header = css`
+const Base = css`
   position: fixed;
+  display: flex;
+  justify-content: space-between;
   background-color: #0be6af;
-  padding: 1rem;
   height: 3rem;
   width: 100%;
+`;
+
+const title = css`
+  flex-basis: 45%;
 `;
 
 class Header extends Component {
   render() {
     return (
-      <header className={header}>
-        <span>Unpublished articles</span>
-        <span>Author</span>
-        <span>Words</span>
-        <span>Submitted</span>
-      </header>
+      <tr className={Base}>
+        <th className={title}>Unpublished articles</th>
+        <th>Author</th>
+        <th>Words</th>
+        <th>Submitted</th>
+      </tr>
     );
   }
 }

@@ -2,18 +2,18 @@ import React, { Component } from 'react';
 import { css } from 'react-emotion';
 import ListItem from './ListItem';
 
-const list = css`
-  margin-top: 3rem;
+const Base = css`
+  margin-top: 5rem;
 `;
 
 class List extends Component {
   render() {
     return (
-      <ul className={list}>
+      <tbody className={Base}>
         {this.props.articles.map((article, i) => (
           <ListItem key={i} item={article} />
-        ))};
-      </ul>
+        ))}
+      </tbody>
     );
   }
 }

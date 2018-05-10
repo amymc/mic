@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { css } from 'react-emotion';
 import moment from 'moment';
 
-const listItem = css`
+const Base = css`
   display: flex;
   flex-direction: row;
 `;
 
-const image = css`
+const Image = css`
   width: 100px;
   height: 63px;
 `;
@@ -28,15 +28,18 @@ class ListItem extends Component {
   render() {
     const { item } = this.props;
     return (
-      <li className={listItem}>
-        <img className={image} src={item.image} alt="" />
-        <h2>{item.title}</h2>
-        <span>
-          {item.first_name} {item.last_name}
-        </span>
-        <span>{item.words}</span>
-        <span>{parseTimestamp(item.publish_at)} ago</span>
-      </li>
+      <tr className={Base}>
+        <td>
+          <img className={Image} src={item.image} alt="" />
+        </td>
+        <td>{item.title}</td>
+        <td>
+          {item.first_name}
+          {item.last_name}
+        </td>
+        <td>{item.words}</td>
+        <td>{parseTimestamp(item.publish_at)}ago</td>
+      </tr>
     );
   }
 }
