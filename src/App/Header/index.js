@@ -16,11 +16,14 @@ const title = css`
 
 class Header extends Component {
   render() {
+    const { props } = this;
     return (
       <tr className={Base}>
         <th className={title}>Unpublished articles</th>
         <th>Author</th>
-        <th>Words</th>
+        <th>
+          <button onClick={props.sort}>Words</button>
+        </th>
         <th>Submitted</th>
       </tr>
     );
