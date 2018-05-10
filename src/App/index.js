@@ -10,6 +10,10 @@ const Base = css`
   flex-direction: column;
 `;
 
+const Table = css`
+  border-collapse: collapse;
+`;
+
 class App extends Component {
   state = {
     allArticles: articles,
@@ -74,7 +78,7 @@ class App extends Component {
   render() {
     return (
       <div className={Base}>
-        <table>
+        <table className={Table}>
           <thead>
             <Header
               sortByWords={this.sortByWords}
