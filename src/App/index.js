@@ -14,8 +14,8 @@ class App extends Component {
   state = {
     allArticles: articles,
     articlesToLoad: articles.slice(0, 10),
-    wordsSortOrder: null,
-    dateSortOrder: null,
+    wordsSortOrder: localStorage.getItem('wordsSortOrder'),
+    dateSortOrder: localStorage.getItem('dateSortOrder'),
   };
 
   onClick = () => {
@@ -49,6 +49,7 @@ class App extends Component {
       articlesToLoad: sortedArticles,
       wordsSortOrder: sortOrder,
     });
+    localStorage.setItem('wordsSortOrder', sortOrder);
   };
 
   sortByDate = () => {
@@ -67,6 +68,7 @@ class App extends Component {
       );
     });
     this.setState({ articlesToLoad: sortedArticles, dateSortOrder: sortOrder });
+    localStorage.setItem('dateSortOrder', sortOrder);
   };
 
   render() {
