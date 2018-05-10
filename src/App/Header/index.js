@@ -22,9 +22,11 @@ class Header extends Component {
         <th className={title}>Unpublished articles</th>
         <th>Author</th>
         <th>
-          <button onClick={props.sort}>Words</button>
+          <button onClick={props.sortByWords}>Words</button>
         </th>
-        <th>Submitted</th>
+        <th>
+          <button onClick={props.sortByDate}>Submitted</button>
+        </th>
       </tr>
     );
   }

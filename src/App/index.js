@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import Header from './Header';
 import List from './List';
 import articles from '../data/articles.json';
@@ -13,7 +14,8 @@ class App extends Component {
   state = {
     allArticles: articles,
     articlesToLoad: articles.slice(0, 10),
-    sortOrder: null,
+    wordsSortOrder: null,
+    dateSortOrder: null,
   };
 
   onClick = () => {
@@ -31,10 +33,11 @@ class App extends Component {
 
   loadMore = () => {};
 
-  sort = () => {
+  sortByWords = () => {
     let sortOrder;
+    // anti-pattern??
     const sortedArticles = this.state.articlesToLoad.sort((a, b) => {
-      if (this.state.sortOrder === 'ascending') {
+      if (this.state.wordsSortOrder === 'ascending') {
         sortOrder = 'descending';
         return b.words - a.words;
       }
@@ -42,7 +45,28 @@ class App extends Component {
       sortOrder = 'ascending';
       return a.words - b.words;
     });
-    this.setState({ articlesToLoad: sortedArticles, sortOrder });
+    this.setState({
+      articlesToLoad: sortedArticles,
+      wordsSortOrder: sortOrder,
+    });
+  };
+
+  sortByDate = () => {
+    let sortOrder;
+    const sortedArticles = this.state.articlesToLoad.sort((a, b) => {
+      if (this.state.dateSortOrder === 'ascending') {
+        sortOrder = 'descending';
+        return (
+          moment(b.publish_at).format('X') - moment(a.publish_at).format('X')
+        );
+      }
+
+      sortOrder = 'ascending';
+      return (
+        moment(a.publish_at).format('X') - moment(b.publish_at).format('X')
+      );
+    });
+    this.setState({ articlesToLoad: sortedArticles, dateSortOrder: sortOrder });
   };
 
   render() {
@@ -50,7 +74,10 @@ class App extends Component {
       <div className={Base}>
         <table>
           <thead>
-            <Header sort={this.sort} />
+            <Header
+              sortByWords={this.sortByWords}
+              sortByDate={this.sortByDate}
+            />
           </thead>
           <List articles={this.state.articlesToLoad} />
         </table>
