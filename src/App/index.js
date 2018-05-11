@@ -39,8 +39,10 @@ class App extends Component {
 
   sortByWords = () => {
     let sortOrder;
-    // anti-pattern??
-    const sortedArticles = this.state.articlesToLoad.sort((a, b) => {
+    //cloning to avoid mutating state, as sort mutates the array
+    const sortedArticles = JSON.parse(
+      JSON.stringify(this.state.articlesToLoad)
+    ).sort((a, b) => {
       if (this.state.wordsSortOrder === 'ascending') {
         sortOrder = 'descending';
         return b.words - a.words;
@@ -58,7 +60,10 @@ class App extends Component {
 
   sortByDate = () => {
     let sortOrder;
-    const sortedArticles = this.state.articlesToLoad.sort((a, b) => {
+    //cloning to avoid mutating state, as sort mutates the array
+    const sortedArticles = JSON.parse(
+      JSON.stringify(this.state.articlesToLoad)
+    ).sort((a, b) => {
       if (this.state.dateSortOrder === 'ascending') {
         sortOrder = 'descending';
         return (
