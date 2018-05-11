@@ -15,27 +15,50 @@ const Table = css`
 `;
 
 class App extends Component {
-  state = {
-    allArticles: articles,
-    articlesToLoad: articles.slice(0, 10),
-    wordsSortOrder: localStorage.getItem('wordsSortOrder'),
-    dateSortOrder: localStorage.getItem('dateSortOrder'),
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      allArticles: articles,
+      articlesToLoad: articles.slice(0, 10),
+      wordsSortOrder: localStorage.getItem('wordsSortOrder'),
+      dateSortOrder: localStorage.getItem('dateSortOrder'),
+    };
+    this.onClick = this.onClick.bind(this);
+  }
 
-  onClick = () => {
+  async onClick() {
     const { allArticles, articlesToLoad } = this.state;
-    this.loadMore();
 
     if (articlesToLoad.length === allArticles.length) {
-      this.loadMore();
+      const additionalArticles = await this.loadMore();
+      this.setState({ allArticles: [...allArticles, ...additionalArticles] });
     } else {
       this.setState({
         articlesToLoad: allArticles.slice(0, articlesToLoad.length + 10),
       });
     }
-  };
+  }
 
-  loadMore = () => {};
+  loadMore = () => {
+    const request = new XMLHttpRequest();
+    request.open('GET', '/data/more-articles.json', true);
+
+    return new Promise(function(resolve, reject) {
+      request.onload = function() {
+        debugger;
+        if (this.status >= 200 && this.status < 400) {
+          resolve(JSON.parse(this.response));
+        }
+      };
+
+      request.onerror = function(err) {
+        console.error(err);
+        // There was a connection error of some sort
+      };
+
+      request.send();
+    });
+  };
 
   sortByWords = () => {
     let sortOrder;
