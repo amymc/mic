@@ -31,7 +31,14 @@ class App extends Component {
 
     if (articlesToLoad.length === allArticles.length) {
       const additionalArticles = await this.loadMore();
-      this.setState({ allArticles: [...allArticles, ...additionalArticles] });
+      debugger;
+      this.setState({
+        allArticles: [...allArticles, ...additionalArticles],
+        articlesToLoad: [...allArticles, ...additionalArticles].slice(
+          0,
+          articlesToLoad.length + 10
+        ),
+      });
     } else {
       this.setState({
         articlesToLoad: allArticles.slice(0, articlesToLoad.length + 10),
@@ -45,7 +52,7 @@ class App extends Component {
 
     return new Promise(function(resolve, reject) {
       request.onload = function() {
-        debugger;
+        // debugger;
         if (this.status >= 200 && this.status < 400) {
           resolve(JSON.parse(this.response));
         }
