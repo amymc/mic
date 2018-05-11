@@ -19,29 +19,47 @@ class App extends Component {
     super(props);
     this.state = {
       allArticles: articles,
-      articlesToLoad: articles.slice(0, 10),
+      articlesToDisplay: articles.slice(0, 10),
+      hasLoadedExternals: false,
       wordsSortOrder: localStorage.getItem('wordsSortOrder'),
       dateSortOrder: localStorage.getItem('dateSortOrder'),
+      shouldShowBtn: true,
     };
     this.onClick = this.onClick.bind(this);
   }
 
   async onClick() {
-    const { allArticles, articlesToLoad } = this.state;
+    const { allArticles, articlesToDisplay, hasLoadedExternals } = this.state;
+    const numToLoad = 10;
 
-    if (articlesToLoad.length === allArticles.length) {
-      const additionalArticles = await this.loadMore();
+    if (articlesToDisplay.length === allArticles.length) {
+      const externalArticles = await this.loadMore();
       debugger;
       this.setState({
-        allArticles: [...allArticles, ...additionalArticles],
-        articlesToLoad: [...allArticles, ...additionalArticles].slice(
+        allArticles: [...allArticles, ...externalArticles],
+        articlesToDisplay: [...allArticles, ...externalArticles].slice(
           0,
-          articlesToLoad.length + 10
+          articlesToDisplay.length + numToLoad
         ),
+        hasLoadedExternals: true,
+      });
+    } else if (
+      articlesToDisplay.length === allArticles.length - numToLoad &&
+      hasLoadedExternals
+    ) {
+      this.setState({
+        articlesToDisplay: allArticles.slice(
+          0,
+          articlesToDisplay.length + numToLoad
+        ),
+        shouldShowBtn: false,
       });
     } else {
       this.setState({
-        articlesToLoad: allArticles.slice(0, articlesToLoad.length + 10),
+        articlesToDisplay: allArticles.slice(
+          0,
+          articlesToDisplay.length + numToLoad
+        ),
       });
     }
   }
@@ -71,7 +89,7 @@ class App extends Component {
     let sortOrder;
     //cloning to avoid mutating state, as sort mutates the array
     const sortedArticles = JSON.parse(
-      JSON.stringify(this.state.articlesToLoad)
+      JSON.stringify(this.state.articlesToDisplay)
     ).sort((a, b) => {
       if (this.state.wordsSortOrder === 'ascending') {
         sortOrder = 'descending';
@@ -82,7 +100,7 @@ class App extends Component {
       return a.words - b.words;
     });
     this.setState({
-      articlesToLoad: sortedArticles,
+      articlesToDisplay: sortedArticles,
       wordsSortOrder: sortOrder,
     });
     localStorage.setItem('wordsSortOrder', sortOrder);
@@ -92,7 +110,7 @@ class App extends Component {
     let sortOrder;
     //cloning to avoid mutating state, as sort mutates the array
     const sortedArticles = JSON.parse(
-      JSON.stringify(this.state.articlesToLoad)
+      JSON.stringify(this.state.articlesToDisplay)
     ).sort((a, b) => {
       if (this.state.dateSortOrder === 'ascending') {
         sortOrder = 'descending';
@@ -106,7 +124,10 @@ class App extends Component {
         moment(a.publish_at).format('X') - moment(b.publish_at).format('X')
       );
     });
-    this.setState({ articlesToLoad: sortedArticles, dateSortOrder: sortOrder });
+    this.setState({
+      articlesToDisplay: sortedArticles,
+      dateSortOrder: sortOrder,
+    });
     localStorage.setItem('dateSortOrder', sortOrder);
   };
 
@@ -120,9 +141,11 @@ class App extends Component {
               sortByDate={this.sortByDate}
             />
           </thead>
-          <List articles={this.state.articlesToLoad} />
+          <List articles={this.state.articlesToDisplay} />
         </table>
-        <button onClick={this.onClick}> Show more...</button>
+        {this.state.shouldShowBtn && (
+          <button onClick={this.onClick}> Show more...</button>
+        )}
       </div>
     );
   }
