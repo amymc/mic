@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import moment from 'moment';
 import styled, { css, keyframes } from 'react-emotion';
 import Header from './Header';
 import List from './List';
@@ -85,6 +84,9 @@ class App extends Component {
   async onClick() {
     const { allArticles, articlesToDisplay, hasLoadedExternals } = this.state;
     const numToLoad = 10;
+    const isPenultimateLoad =
+      articlesToDisplay.length === allArticles.length - numToLoad &&
+      hasLoadedExternals;
 
     if (articlesToDisplay.length === allArticles.length) {
       const externalArticles = await loadArticles();
@@ -96,52 +98,41 @@ class App extends Component {
         ),
         hasLoadedExternals: true,
       });
-    } else if (
-      articlesToDisplay.length === allArticles.length - numToLoad &&
-      hasLoadedExternals
-    ) {
-      this.setState({
-        articlesToDisplay: allArticles.slice(
-          0,
-          articlesToDisplay.length + numToLoad
-        ),
-        shouldShowBtn: false,
-      });
-    } else {
-      this.setState({
-        articlesToDisplay: allArticles.slice(
-          0,
-          articlesToDisplay.length + numToLoad
-        ),
-      });
+      return;
     }
+
+    this.setState({
+      articlesToDisplay: allArticles.slice(
+        0,
+        articlesToDisplay.length + numToLoad
+      ),
+      shouldShowBtn: isPenultimateLoad ? false : true,
+    });
   }
 
   updateSortOrder = sortBy => {
-    let sortOrder;
+    let dateSortOrder, wordSortOrder;
     if (sortBy === 'words') {
-      sortOrder =
+      wordSortOrder =
         this.state.wordSortOrder === 'ascending' ? 'descending' : 'ascending';
-      localStorage.setItem('wordSortOrder', JSON.stringify(sortOrder));
-      // all values are saved in local storage as string
-      localStorage.setItem('dateSortOrder', JSON.stringify(null));
-      this.setState({
-        articlesToDisplay: sortByWords(this.state.articlesToDisplay, sortOrder),
-        dateSortOrder: null,
-        wordSortOrder: sortOrder,
-      });
+      dateSortOrder = null;
     } else {
-      sortOrder =
+      dateSortOrder =
         this.state.dateSortOrder === 'ascending' ? 'descending' : 'ascending';
-      localStorage.setItem('dateSortOrder', JSON.stringify(sortOrder));
-      // all values are saved in local storage as string
-      localStorage.setItem('wordSortOrder', JSON.stringify(null));
-      this.setState({
-        articlesToDisplay: sortByDate(this.state.articlesToDisplay, sortOrder),
-        dateSortOrder: sortOrder,
-        wordSortOrder: null,
-      });
+      wordSortOrder = null;
     }
+    const articlesToDisplay = wordSortOrder
+      ? sortByWords(this.state.articlesToDisplay, wordSortOrder)
+      : sortByDate(this.state.articlesToDisplay, dateSortOrder);
+    // all values are saved in local storage as string
+    localStorage.setItem('wordSortOrder', JSON.stringify(wordSortOrder));
+    localStorage.setItem('dateSortOrder', JSON.stringify(dateSortOrder));
+
+    this.setState({
+      articlesToDisplay,
+      dateSortOrder,
+      wordSortOrder,
+    });
   };
 
   render() {
