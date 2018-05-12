@@ -3,29 +3,50 @@ import { css } from 'react-emotion';
 import { parseTimestamp } from '../../../utils';
 
 const row = css`
-  margin-bottom: 0.5rem;
+  display: block;
+  background-color: white;
+  border: 1px solid #ededed;
+  margin: 0.5rem;
+  padding: 0.2rem;
   &:hover {
     background-color: black;
     color: #0be6af;
   }
+  @media (min-width: 540px) {
+    display: table-row;
+    border: none;
+    background-color: #fafafa;
+    margin-bottom: 0.5rem;
+    padding: 0;
+  }
 `;
 
-// display: flex;
-// flex-direction: row;
-// align-items: center;
 const cell = css`
-  padding: 0 0.7rem;
+  position: relative;
+  display: block;
+  padding-left: 30%;
+  &:before {
+    position: absolute;
+    left: 6px;
+    content: attr(data-column);
+    font-weight: bold;
+  }
+  @media (min-width: 540px) {
+    display: table-cell;
+    position: static;
+    padding: 0 0.7rem;
+    &:before {
+      display: none;
+    }
+  }
 `;
-//width: 10%;
 
-const small = css`
-  width: 5%;
+const imageWrapper = css`
+  display: none;
+  @media (min-width: 540px) {
+    display: table-cell;
+  }
 `;
-
-const imageWrapper = css``;
-//   display: flex;
-// width: 12%;
-// margin: 0.5rem 0;
 
 const image = css`
   width: 100px;
@@ -34,41 +55,25 @@ const image = css`
   margin: 0.2rem 0;
 `;
 
-// padding: 0 0.5rem;
-
-const title = css``;
-// width: 60%;
-//   flex-grow: 1;
-
 const Row = props => {
   const { item } = props;
   return (
     <tr className={row}>
-      <td
-        className={css`
-          ${cell} ${imageWrapper};
-        `}
-      >
+      <td className={imageWrapper}>
         <img className={image} src={item.image} alt="" />
       </td>
-      <td
-        className={css`
-          ${cell} ${title};
-        `}
-      >
+      <td data-column="title" className={cell}>
         {item.title}
       </td>
-      <td className={cell}>
+      <td data-column="author" className={cell}>
         {item.profile.first_name} {item.profile.last_name}
       </td>
-      <td
-        className={css`
-          ${cell} ${small};
-        `}
-      >
+      <td data-column="words" className={cell}>
         {item.words}
       </td>
-      <td className={cell}>{parseTimestamp(item.publish_at)} ago</td>
+      <td data-column="submitted" className={cell}>
+        {parseTimestamp(item.publish_at)} ago
+      </td>
     </tr>
   );
 };
