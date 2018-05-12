@@ -4,6 +4,7 @@ import styled, { css, keyframes } from 'react-emotion';
 import Header from './Header';
 import List from './List';
 import articles from '../data/articles.json';
+import loadArticles from '../loadArticles';
 import { sortByDate, sortByWords } from '../utils';
 
 const buttonPop = keyframes`
@@ -86,8 +87,7 @@ class App extends Component {
     const numToLoad = 10;
 
     if (articlesToDisplay.length === allArticles.length) {
-      const externalArticles = await this.loadMore();
-      debugger;
+      const externalArticles = await loadArticles();
       this.setState({
         allArticles: [...allArticles, ...externalArticles],
         articlesToDisplay: [...allArticles, ...externalArticles].slice(
@@ -117,27 +117,6 @@ class App extends Component {
     }
   }
 
-  loadMore = () => {
-    const request = new XMLHttpRequest();
-    request.open('GET', '/data/more-articles.json', true);
-
-    return new Promise(function(resolve, reject) {
-      request.onload = function() {
-        // debugger;
-        if (this.status >= 200 && this.status < 400) {
-          resolve(JSON.parse(this.response));
-        }
-      };
-
-      request.onerror = function(err) {
-        console.error(err);
-        // There was a connection error of some sort
-      };
-
-      request.send();
-    });
-  };
-
   updateSortOrder = sortBy => {
     let sortOrder;
     if (sortBy === 'words') {
@@ -146,38 +125,22 @@ class App extends Component {
       localStorage.setItem('wordSortOrder', JSON.stringify(sortOrder));
       // all values are saved in local storage as string
       localStorage.setItem('dateSortOrder', JSON.stringify(null));
-      this.setState(
-        {
-          dateSortOrder: null,
-          wordSortOrder: sortOrder,
-        },
-        () =>
-          this.setState({
-            articlesToDisplay: sortByWords(
-              this.state.articlesToDisplay,
-              sortOrder
-            ),
-          })
-      );
+      this.setState({
+        articlesToDisplay: sortByWords(this.state.articlesToDisplay, sortOrder),
+        dateSortOrder: null,
+        wordSortOrder: sortOrder,
+      });
     } else {
       sortOrder =
         this.state.dateSortOrder === 'ascending' ? 'descending' : 'ascending';
       localStorage.setItem('dateSortOrder', JSON.stringify(sortOrder));
       // all values are saved in local storage as string
       localStorage.setItem('wordSortOrder', JSON.stringify(null));
-      this.setState(
-        {
-          dateSortOrder: sortOrder,
-          wordSortOrder: null,
-        },
-        () =>
-          this.setState({
-            articlesToDisplay: sortByDate(
-              this.state.articlesToDisplay,
-              sortOrder
-            ),
-          })
-      );
+      this.setState({
+        articlesToDisplay: sortByDate(this.state.articlesToDisplay, sortOrder),
+        dateSortOrder: sortOrder,
+        wordSortOrder: null,
+      });
     }
   };
 
