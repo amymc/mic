@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { css } from 'react-emotion';
 import { parseTimestamp } from '../../utils';
 
-const base = css`
+const row = css`
   margin-bottom: 0.5rem;
   &:hover {
     background-color: black;
@@ -40,39 +40,37 @@ const title = css``;
 // width: 60%;
 //   flex-grow: 1;
 
-class ListItem extends Component {
-  render() {
-    const { item } = this.props;
-    return (
-      <tr className={base}>
-        <td
-          className={css`
-            ${cell} ${imageWrapper};
-          `}
-        >
-          <img className={image} src={item.image} alt="" />
-        </td>
-        <td
-          className={css`
-            ${cell} ${title};
-          `}
-        >
-          {item.title}
-        </td>
-        <td className={cell}>
-          {item.profile.first_name} {item.profile.last_name}
-        </td>
-        <td
-          className={css`
-            ${cell} ${small};
-          `}
-        >
-          {item.words}
-        </td>
-        <td className={cell}>{parseTimestamp(item.publish_at)} ago</td>
-      </tr>
-    );
-  }
-}
+const ListItem = props => {
+  const { item } = props;
+  return (
+    <tr className={row}>
+      <td
+        className={css`
+          ${cell} ${imageWrapper};
+        `}
+      >
+        <img className={image} src={item.image} alt="" />
+      </td>
+      <td
+        className={css`
+          ${cell} ${title};
+        `}
+      >
+        {item.title}
+      </td>
+      <td className={cell}>
+        {item.profile.first_name} {item.profile.last_name}
+      </td>
+      <td
+        className={css`
+          ${cell} ${small};
+        `}
+      >
+        {item.words}
+      </td>
+      <td className={cell}>{parseTimestamp(item.publish_at)} ago</td>
+    </tr>
+  );
+};
 
 export default ListItem;

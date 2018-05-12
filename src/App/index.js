@@ -54,7 +54,7 @@ class App extends Component {
       allArticles: articles,
       articlesToDisplay: articles.slice(0, 10),
       hasLoadedExternals: false,
-      wordsSortOrder: JSON.parse(localStorage.getItem('wordsSortOrder')),
+      wordSortOrder: JSON.parse(localStorage.getItem('wordSortOrder')),
       dateSortOrder: JSON.parse(localStorage.getItem('dateSortOrder')),
       shouldShowBtn: true,
     };
@@ -62,8 +62,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { dateSortOrder, wordsSortOrder } = this.state;
-    if (wordsSortOrder) {
+    const { dateSortOrder, wordSortOrder } = this.state;
+    if (wordSortOrder) {
       this.sortByWords();
     } else if (dateSortOrder) {
       this.sortByDate();
@@ -127,55 +127,77 @@ class App extends Component {
     });
   };
 
+  updateSortOrder = sortBy => {
+    let sortOrder;
+    if (sortBy === 'words') {
+      sortOrder =
+        this.state.wordSortOrder === 'ascending' ? 'descending' : 'ascending';
+      localStorage.setItem('wordSortOrder', JSON.stringify(sortOrder));
+      // all values are saved in local storage as string
+      localStorage.setItem('dateSortOrder', JSON.stringify(null));
+      this.setState(
+        {
+          dateSortOrder: null,
+          wordSortOrder: sortOrder,
+        },
+        () => this.sortByWords()
+      );
+    } else {
+      sortOrder =
+        this.state.dateSortOrder === 'ascending' ? 'descending' : 'ascending';
+      localStorage.setItem('dateSortOrder', JSON.stringify(sortOrder));
+      // all values are saved in local storage as string
+      localStorage.setItem('wordSortOrder', JSON.stringify(null));
+      this.setState(
+        {
+          dateSortOrder: sortOrder,
+          wordSortOrder: null,
+        },
+        () => this.sortByDate()
+      );
+    }
+  };
+
   sortByWords = () => {
     let sortOrder;
     //cloning to avoid mutating state, as sort mutates the array
-    const sortedArticles = JSON.parse(
-      JSON.stringify(this.state.articlesToDisplay)
-    ).sort((a, b) => {
-      if (this.state.wordsSortOrder === 'ascending') {
-        sortOrder = 'descending';
-        return b.words - a.words;
-      }
+    const sortedArticles = this.state.articlesToDisplay
+      .map(a => ({ ...a }))
+      .sort((a, b) => {
+        if (this.state.wordSortOrder === 'ascending') {
+          sortOrder = 'descending';
+          return b.words - a.words;
+        }
 
-      sortOrder = 'ascending';
-      return a.words - b.words;
-    });
+        sortOrder = 'ascending';
+        return a.words - b.words;
+      });
     this.setState({
       articlesToDisplay: sortedArticles,
-      dateSortOrder: null,
-      wordsSortOrder: sortOrder,
     });
-    localStorage.setItem('wordsSortOrder', JSON.stringify(sortOrder));
-    // all values are saved in local storage as string
-    localStorage.setItem('dateSortOrder', JSON.stringify(null));
   };
 
   sortByDate = () => {
     let sortOrder;
     //cloning to avoid mutating state, as sort mutates the array
-    const sortedArticles = JSON.parse(
-      JSON.stringify(this.state.articlesToDisplay)
-    ).sort((a, b) => {
-      if (this.state.dateSortOrder === 'ascending') {
-        sortOrder = 'descending';
-        return (
-          moment(b.publish_at).format('X') - moment(a.publish_at).format('X')
-        );
-      }
+    const sortedArticles = this.state.articlesToDisplay
+      .map(a => ({ ...a }))
+      .sort((a, b) => {
+        if (this.state.dateSortOrder === 'ascending') {
+          sortOrder = 'descending';
+          return (
+            moment(b.publish_at).format('X') - moment(a.publish_at).format('X')
+          );
+        }
 
-      sortOrder = 'ascending';
-      return (
-        moment(a.publish_at).format('X') - moment(b.publish_at).format('X')
-      );
-    });
+        sortOrder = 'ascending';
+        return (
+          moment(a.publish_at).format('X') - moment(b.publish_at).format('X')
+        );
+      });
     this.setState({
       articlesToDisplay: sortedArticles,
-      dateSortOrder: sortOrder,
-      wordsSortOrder: null,
     });
-    localStorage.setItem('dateSortOrder', JSON.stringify(sortOrder));
-    localStorage.setItem('wordsSortOrder', JSON.stringify(null));
   };
 
   render() {
@@ -183,16 +205,15 @@ class App extends Component {
       articlesToDisplay,
       shouldShowBtn,
       dateSortOrder,
-      wordsSortOrder,
+      wordSortOrder,
     } = this.state;
     return (
       <div className={base}>
         <table className={table}>
           <thead>
             <Header
-              sortByWords={this.sortByWords}
-              sortByDate={this.sortByDate}
-              wordsSortOrder={wordsSortOrder}
+              sortBy={this.updateSortOrder}
+              wordSortOrder={wordSortOrder}
               dateSortOrder={dateSortOrder}
             />
           </thead>
