@@ -1,6 +1,6 @@
 import React from 'react';
 import { css } from 'react-emotion';
-import { parseTimestamp } from '../../utils';
+import { parseTimestamp } from '../../../utils';
 
 const row = css`
   margin-bottom: 0.5rem;
@@ -40,7 +40,7 @@ const title = css``;
 // width: 60%;
 //   flex-grow: 1;
 
-const ListItem = props => {
+const Row = props => {
   const { item } = props;
   return (
     <tr className={row}>
@@ -73,4 +73,4 @@ const ListItem = props => {
   );
 };
 
-export default ListItem;
+export default Row;

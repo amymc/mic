@@ -1,18 +1,18 @@
 import React from 'react';
 import { css } from 'react-emotion';
-import ListItem from './ListItem';
+import Row from './Row';
 
 const body = css`
   display: block;
   margin-top: 3rem;
 `;
 
-const List = props => {
+const Body = props => {
   return (
     <tbody className={body}>
-      {props.articles.map((article, i) => <ListItem key={i} item={article} />)}
+      {props.articles.map((article, i) => <Row key={i} item={article} />)}
     </tbody>
   );
 };
 
-export default List;
+export default Body;
