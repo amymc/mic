@@ -12,6 +12,9 @@ const Image = css`
   height: 63px;
 `;
 
+const maybePluralise = (count, noun, suffix = 's') =>
+  `${count} ${noun}${count !== 1 ? suffix : ''}`;
+
 const parseTimestamp = timestamp => {
   const timePublished = moment(timestamp, 'YYYY-MM-DD HH:mm');
   // mocking a time close to the publication dates
@@ -20,7 +23,9 @@ const parseTimestamp = timestamp => {
   const diff = Math.abs(timePublished.diff(mockCurrentTime, 'minutes'));
 
   const parsedResult =
-    diff > 60 ? `${Math.round(diff / 60)} hours` : `${diff} minutes`;
+    diff > 60
+      ? `${maybePluralise(Math.round(diff / 60), 'hour')}`
+      : `${maybePluralise(diff, 'minute')}`;
   return parsedResult;
 };
 
