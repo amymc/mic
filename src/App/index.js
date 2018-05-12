@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
-import styled, { css, keyframes } from 'react-emotion';
-import Header from './Header';
-import List from './List';
+import { css } from 'react-emotion';
 import articles from '../data/articles.json';
 import loadArticles from '../loadArticles';
 import { sortByDate, sortByWords } from '../utils';
+import Header from './Header';
+import List from './List';
+import Button from './shared/Button';
 
-const buttonPop = keyframes`
-  0%{
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-  }
-`;
+// const buttonPop = keyframes`
+//   0%{
+//     transform: scale(1);
+//   }
+//   50% {
+//     transform: scale(1.05);
+//   }
+//   100% {
+//     transform: scale(1);
+//   }
+// `;
 
 const base = css`
   display: flex;
@@ -34,19 +35,19 @@ const table = css`
   border-collapse: collapse;
 `;
 
-const Button = styled('button')`
-  background-color: #0be6af;
-  padding: 1.125rem 1rem;
-  border-radius: 4rem;
-  font-size: 0.9rem;
-  cursor: pointer;
-  border: 0;
-  width: 40%;
-  align-self: center;
-  &:hover {
-    animation: ${buttonPop} 0.4s ease;
-  }
-`;
+// const Button = styled('button')`
+//   background-color: #0be6af;
+//   padding: 1.125rem 1rem;
+//   border-radius: 4rem;
+//   font-size: 0.9rem;
+//   cursor: pointer;
+//   border: 0;
+//   width: 40%;
+//   align-self: center;
+//   &:hover {
+//     animation: ${buttonPop} 0.4s ease;
+//   }
+// `;
 
 class App extends Component {
   constructor(props) {
@@ -154,7 +155,7 @@ class App extends Component {
           </thead>
           <List articles={articlesToDisplay} />
         </table>
-        {shouldShowBtn && <Button onClick={this.onClick}>Show more...</Button>}
+        {shouldShowBtn && <Button onClick={this.onClick} text="Show more..." />}
       </div>
     );
   }

@@ -11,7 +11,6 @@ export default () => {
 
     request.onerror = function(err) {
       console.error(err);
-      // There was a connection error of some sort
     };
 
     request.send();
