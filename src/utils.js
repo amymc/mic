@@ -16,3 +16,25 @@ export const parseTimestamp = timestamp => {
       : `${maybePluralise(diff, 'minute')}`;
   return parsedResult;
 };
+
+export const sortByDate = (articles, sortOrder) => {
+  //cloning to avoid mutating state, as sort mutates the array
+  return articles.map(a => ({ ...a })).sort((a, b) => {
+    if (sortOrder === 'ascending') {
+      return (
+        moment(b.publish_at).format('X') - moment(a.publish_at).format('X')
+      );
+    }
+    return moment(a.publish_at).format('X') - moment(b.publish_at).format('X');
+  });
+};
+
+export const sortByWords = (articles, sortOrder) => {
+  //cloning to avoid mutating state, as sort mutates the array
+  return articles.map(a => ({ ...a })).sort((a, b) => {
+    if (sortOrder === 'ascending') {
+      return b.words - a.words;
+    }
+    return a.words - b.words;
+  });
+};

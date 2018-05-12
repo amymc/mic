@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import styled, { css, keyframes } from 'react-emotion';
 import Header from './Header';
 import List from './List';
 import articles from '../data/articles.json';
-import styled, { css, keyframes } from 'react-emotion';
+import { sortByDate, sortByWords } from '../utils';
 
 const buttonPop = keyframes`
   0%{
@@ -64,9 +65,19 @@ class App extends Component {
   componentDidMount() {
     const { dateSortOrder, wordSortOrder } = this.state;
     if (wordSortOrder) {
-      this.sortByWords();
+      this.setState({
+        articlesToDisplay: sortByWords(
+          this.state.articlesToDisplay,
+          wordSortOrder
+        ),
+      });
     } else if (dateSortOrder) {
-      this.sortByDate();
+      this.setState({
+        articlesToDisplay: sortByDate(
+          this.state.articlesToDisplay,
+          dateSortOrder
+        ),
+      });
     }
   }
 
@@ -140,7 +151,13 @@ class App extends Component {
           dateSortOrder: null,
           wordSortOrder: sortOrder,
         },
-        () => this.sortByWords()
+        () =>
+          this.setState({
+            articlesToDisplay: sortByWords(
+              this.state.articlesToDisplay,
+              sortOrder
+            ),
+          })
       );
     } else {
       sortOrder =
@@ -153,51 +170,15 @@ class App extends Component {
           dateSortOrder: sortOrder,
           wordSortOrder: null,
         },
-        () => this.sortByDate()
+        () =>
+          this.setState({
+            articlesToDisplay: sortByDate(
+              this.state.articlesToDisplay,
+              sortOrder
+            ),
+          })
       );
     }
-  };
-
-  sortByWords = () => {
-    let sortOrder;
-    //cloning to avoid mutating state, as sort mutates the array
-    const sortedArticles = this.state.articlesToDisplay
-      .map(a => ({ ...a }))
-      .sort((a, b) => {
-        if (this.state.wordSortOrder === 'ascending') {
-          sortOrder = 'descending';
-          return b.words - a.words;
-        }
-
-        sortOrder = 'ascending';
-        return a.words - b.words;
-      });
-    this.setState({
-      articlesToDisplay: sortedArticles,
-    });
-  };
-
-  sortByDate = () => {
-    let sortOrder;
-    //cloning to avoid mutating state, as sort mutates the array
-    const sortedArticles = this.state.articlesToDisplay
-      .map(a => ({ ...a }))
-      .sort((a, b) => {
-        if (this.state.dateSortOrder === 'ascending') {
-          sortOrder = 'descending';
-          return (
-            moment(b.publish_at).format('X') - moment(a.publish_at).format('X')
-          );
-        }
-
-        sortOrder = 'ascending';
-        return (
-          moment(a.publish_at).format('X') - moment(b.publish_at).format('X')
-        );
-      });
-    this.setState({
-      articlesToDisplay: sortedArticles,
-    });
   };
 
   render() {
