@@ -110,6 +110,7 @@ class App extends Component {
     });
     this.setState({
       articlesToDisplay: sortedArticles,
+      dateSortOrder: null,
       wordsSortOrder: sortOrder,
     });
     localStorage.setItem('wordsSortOrder', JSON.stringify(sortOrder));
@@ -138,12 +139,19 @@ class App extends Component {
     this.setState({
       articlesToDisplay: sortedArticles,
       dateSortOrder: sortOrder,
+      wordsSortOrder: null,
     });
     localStorage.setItem('dateSortOrder', JSON.stringify(sortOrder));
     localStorage.setItem('wordsSortOrder', JSON.stringify(null));
   };
 
   render() {
+    const {
+      articlesToDisplay,
+      shouldShowBtn,
+      dateSortOrder,
+      wordsSortOrder,
+    } = this.state;
     return (
       <div className={Base}>
         <table className={Table}>
@@ -151,13 +159,13 @@ class App extends Component {
             <Header
               sortByWords={this.sortByWords}
               sortByDate={this.sortByDate}
+              wordsSortOrder={wordsSortOrder}
+              dateSortOrder={dateSortOrder}
             />
           </thead>
-          <List articles={this.state.articlesToDisplay} />
+          <List articles={articlesToDisplay} />
         </table>
-        {this.state.shouldShowBtn && (
-          <button onClick={this.onClick}> Show more...</button>
-        )}
+        {shouldShowBtn && <button onClick={this.onClick}> Show more...</button>}
       </div>
     );
   }
