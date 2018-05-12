@@ -2,15 +2,43 @@ import React, { Component } from 'react';
 import { css } from 'react-emotion';
 import moment from 'moment';
 
-const Base = css`
-  display: flex;
-  flex-direction: row;
+const base = css`
+  margin-bottom: 0.5rem;
+  &:hover {
+    background-color: black;
+    color: #0be6af;
+  }
 `;
 
-const Image = css`
+// display: flex;
+// flex-direction: row;
+// align-items: center;
+const cell = css`
+  padding: 0 0.7rem;
+`;
+//width: 10%;
+
+const small = css`
+  width: 5%;
+`;
+
+const imageWrapper = css``;
+//   display: flex;
+// width: 12%;
+// margin: 0.5rem 0;
+
+const image = css`
   width: 100px;
   height: 63px;
+  vertical-align: middle;
+  margin: 0.2rem 0;
 `;
+
+// padding: 0 0.5rem;
+
+const title = css``;
+// width: 60%;
+//   flex-grow: 1;
 
 const maybePluralise = (count, noun, suffix = 's') =>
   `${count} ${noun}${count !== 1 ? suffix : ''}`;
@@ -33,17 +61,32 @@ class ListItem extends Component {
   render() {
     const { item } = this.props;
     return (
-      <tr className={Base}>
-        <td>
-          <img className={Image} src={item.image} alt="" />
+      <tr className={base}>
+        <td
+          className={css`
+            ${cell} ${imageWrapper};
+          `}
+        >
+          <img className={image} src={item.image} alt="" />
         </td>
-        <td>{item.title}</td>
-        <td>
-          {item.first_name}
-          {item.last_name}
+        <td
+          className={css`
+            ${cell} ${title};
+          `}
+        >
+          {item.title}
         </td>
-        <td>{item.words}</td>
-        <td>{parseTimestamp(item.publish_at)}ago</td>
+        <td className={cell}>
+          {item.profile.first_name} {item.profile.last_name}
+        </td>
+        <td
+          className={css`
+            ${cell} ${small};
+          `}
+        >
+          {item.words}
+        </td>
+        <td className={cell}>{parseTimestamp(item.publish_at)} ago</td>
       </tr>
     );
   }

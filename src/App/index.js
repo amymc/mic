@@ -3,15 +3,48 @@ import moment from 'moment';
 import Header from './Header';
 import List from './List';
 import articles from '../data/articles.json';
-import { css } from 'react-emotion';
+import styled, { css, keyframes } from 'react-emotion';
 
-const Base = css`
-  display: flex;
-  flex-direction: column;
+const buttonPop = keyframes`
+  0%{
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 `;
 
-const Table = css`
+const base = css`
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+  font-family: 'Roboto', sans-serif;
+  background-color: #fafafa;
+`;
+
+const table = css`
+  width: 100%;
+  table-layout: fixed;
+  margin-bottom: 0.5rem;
+
   border-collapse: collapse;
+`;
+
+const Button = styled('button')`
+  background-color: #0be6af;
+  padding: 1.125rem 1rem;
+  border-radius: 4rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: 0;
+  width: 40%;
+  align-self: center;
+  &:hover {
+    animation: ${buttonPop} 0.4s ease;
+  }
 `;
 
 class App extends Component {
@@ -153,8 +186,8 @@ class App extends Component {
       wordsSortOrder,
     } = this.state;
     return (
-      <div className={Base}>
-        <table className={Table}>
+      <div className={base}>
+        <table className={table}>
           <thead>
             <Header
               sortByWords={this.sortByWords}
@@ -165,7 +198,7 @@ class App extends Component {
           </thead>
           <List articles={articlesToDisplay} />
         </table>
-        {shouldShowBtn && <button onClick={this.onClick}> Show more...</button>}
+        {shouldShowBtn && <Button onClick={this.onClick}>Show more...</Button>}
       </div>
     );
   }

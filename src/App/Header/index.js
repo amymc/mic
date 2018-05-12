@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { css } from 'react-emotion';
 import Arrows from './Arrows';
 
-const Base = css`
+const base = css`
   position: fixed;
   display: flex;
   justify-content: space-between;
@@ -11,11 +11,11 @@ const Base = css`
   width: 100%;
 `;
 
-const Title = css`
-  flex-basis: 45%;
+const title = css`
+  flex-basis: 65%;
 `;
 
-const Button = css`
+const button = css`
   background: none;
   border: none;
   padding: 0;
@@ -27,17 +27,17 @@ class Header extends Component {
   render() {
     const { props } = this;
     return (
-      <tr className={Base}>
-        <th className={Title}>Unpublished articles</th>
+      <tr className={base}>
+        <th className={title}>Unpublished articles</th>
         <th>Author</th>
         <th>
-          <button className={Button} onClick={props.sortByWords}>
+          <button className={button} onClick={props.sortByWords}>
             Words
             <Arrows sortOrder={props.wordsSortOrder} />
           </button>
         </th>
         <th>
-          <button className={Button} onClick={props.sortByDate}>
+          <button className={button} onClick={props.sortByDate}>
             Submitted
             <Arrows sortOrder={props.dateSortOrder} />
           </button>

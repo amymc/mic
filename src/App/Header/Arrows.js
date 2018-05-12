@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'react-emotion';
 
-// const Base = css`
-//   color: #7f7f7f;
-// `;
-
 const Arrow = styled('span')`
   color: ${props => (props.isActive ? '#000' : '#7f7f7f')};
 `;

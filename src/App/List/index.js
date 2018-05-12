@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { css } from 'react-emotion';
 import ListItem from './ListItem';
 
-const Base = css`
+const base = css`
   display: block;
-  margin-top: 5rem;
+  margin-top: 3rem;
 `;
 
 class List extends Component {
   render() {
     return (
-      <tbody className={Base}>
+      <tbody className={base}>
         {this.props.articles.map((article, i) => (
           <ListItem key={i} item={article} />
         ))}
