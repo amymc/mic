@@ -21,11 +21,20 @@ class App extends Component {
       allArticles: articles,
       articlesToDisplay: articles.slice(0, 10),
       hasLoadedExternals: false,
-      wordsSortOrder: localStorage.getItem('wordsSortOrder'),
-      dateSortOrder: localStorage.getItem('dateSortOrder'),
+      wordsSortOrder: JSON.parse(localStorage.getItem('wordsSortOrder')),
+      dateSortOrder: JSON.parse(localStorage.getItem('dateSortOrder')),
       shouldShowBtn: true,
     };
     this.onClick = this.onClick.bind(this);
+  }
+
+  componentDidMount() {
+    const { dateSortOrder, wordsSortOrder } = this.state;
+    if (wordsSortOrder) {
+      this.sortByWords();
+    } else if (dateSortOrder) {
+      this.sortByDate();
+    }
   }
 
   async onClick() {
@@ -103,7 +112,9 @@ class App extends Component {
       articlesToDisplay: sortedArticles,
       wordsSortOrder: sortOrder,
     });
-    localStorage.setItem('wordsSortOrder', sortOrder);
+    localStorage.setItem('wordsSortOrder', JSON.stringify(sortOrder));
+    // all values are saved in local storage as string
+    localStorage.setItem('dateSortOrder', JSON.stringify(null));
   };
 
   sortByDate = () => {
@@ -128,7 +139,8 @@ class App extends Component {
       articlesToDisplay: sortedArticles,
       dateSortOrder: sortOrder,
     });
-    localStorage.setItem('dateSortOrder', sortOrder);
+    localStorage.setItem('dateSortOrder', JSON.stringify(sortOrder));
+    localStorage.setItem('wordsSortOrder', JSON.stringify(null));
   };
 
   render() {
