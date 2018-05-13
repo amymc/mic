@@ -1,6 +1,10 @@
 export default () => {
   const request = new XMLHttpRequest();
-  request.open('GET', '/data/more-articles.json', true);
+  request.open(
+    'GET',
+    `${process.env.REACT_APP_HOST}/data/more-articles.json`,
+    true
+  );
 
   return new Promise(function(resolve, reject) {
     request.onload = function() {
