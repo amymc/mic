@@ -19,7 +19,7 @@
   },
   "scripts": {
     "start": "REACT_APP_HOST=http://localhost:3000 react-scripts start",
-    "build": "REACT_APP_HOST=http://amymccarthy.co react-scripts build",
+    "build": "REACT_APP_HOST=http://amymccarthy.co/mic react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "deploy": "gh-pages -d build"
