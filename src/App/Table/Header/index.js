@@ -2,11 +2,16 @@ import React from 'react';
 import { css } from 'react-emotion';
 import Arrows from './Arrows';
 
+const head = css`
+  display: table;
+  width: 100%;
+`;
+
 const row = css`
+  box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  position: fixed;
   background-color: #0be6af;
   height: 3.5rem;
   width: 100%;
@@ -14,30 +19,28 @@ const row = css`
   border: 1px solid #ededed;
   @media (min-width: 540px) {
     display: table-row;
+    padding: 0.5rem 0;
   }
 `;
-
-// display: none;
-//   @media (min-width: 540px) {
-//     position: fixed;
-//     display: flex;
-//     justify-content: space-between;
-//     background-color: #0be6af;
-//     height: 3rem;
-//     width: 100%;
-//   }
 
 const title = css`
   flex: 0 0 100%;
   font-size: 1.2rem;
   padding-bottom: 0.2rem;
   @media (min-width: 540px) {
-    display: table-cell;
+    padding-left: 130px;
+    flex: none;
+    width: 60%;
+    text-align: left;
   }
 `;
 
 const buttonWrapper = css`
   flex-basis: 40%;
+  @media (min-width: 540px) {
+    flex: none;
+    width: 8%;
+  }
 `;
 
 const button = css`
@@ -52,12 +55,13 @@ const hidden = css`
   display: none;
   @media (min-width: 540px) {
     display: table-cell;
+    width: 10%;
   }
 `;
 
 const Header = props => {
   return (
-    <thead>
+    <thead className={head}>
       <tr className={row}>
         <th className={title}>Unpublished articles</th>
         <th className={hidden}>Author</th>

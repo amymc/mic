@@ -4,9 +4,10 @@ import Row from './Row';
 
 const body = css`
   display: block;
-  margin-top: 4rem;
   @media (min-width: 540px) {
-    margin-top: 3.5rem;
+    display: table;
+    width: 100%;
+    margin-top: 0;
   }
 `;
 
